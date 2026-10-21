@@ -23,4 +23,27 @@ botonEnviar.addEventListener('click', function() {
         mensajeSalida.textContent = "¡Hola, " + valorUsuario + "! Acabas de programar tu primera interacción con JavaScript.";
         // Mostramos un saludo personalizado con su texto
     }
-});
+1//.  Buscamos el nuevo boton de la API y le agregamos un evento de clic
+    const botonApi= document.getElementById('apiBtn');
+    botonApi.addEventListener('click', function() {
+        // Lógica para buscar consejo web
+        mensajeSalida.classList.remove('mensaje-oculto'); // Aseguramos que el mensaje esté visible antes de mostrar uno nuevo
+        mensajeSalida.classList.add('mensaje-salida'); // <-- ¡Esta línea es la que faltaba activar!
+        mensajeSalida.style.color = "#38bdf8";
+        mensajeSalida.style.borderColor = "#38bdf8";
+        mensajeSalida.textContent = "Conectando con el servidor...";
+
+        // Hacemos la solicitud a la API con fetch
+        fetch('https://api.adviceslip.com/advice')
+            .then(respuesta => respuesta.json()) // Convertimos la respuesta a JSON para que lo entienda JavaScript
+            .then(datos => {
+                //Extraemmos el texto del consejo de la respuesta de la API y lo mostramos en el mensaje de salida o sea tarjerta
+                const consejoSAleatorio = datos.slip.advice;
+                mensajeSalida.textContent = "Consejo web: " + consejoSAleatorio;
+            });
+            .catch(error => {
+                // En caso de error, mostramos un mensaje de error en la tarjeta
+                mensajeSalida.style.color = "#f87171";
+                mensajeSalida.style.borderColor = "#f87171";
+                mensajeSalida.textContent = "Error al conectar con el servidor.";
+            });
